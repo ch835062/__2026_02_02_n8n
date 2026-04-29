@@ -1,0 +1,92 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f9488605-6bbe-4284-ab5a-2f2f576cb666",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://zenquotes.io/api/random",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e0ddbeaf-5a7e-41f0-b2a5-b5c5323db01b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8400cd15-38c1-48e3-b36e-6a398a1414cd",
+              "name": "問題",
+              "value": "={{ $json.q }}",
+              "type": "string"
+            },
+            {
+              "id": "b0b82332-9be8-4fe5-b8a8-359577abaacc",
+              "name": "作者",
+              "value": "={{ $json.a }}",
+              "type": "string"
+            },
+            {
+              "id": "3a558b78-b920-42e6-9fe6-502170e9cb24",
+              "name": "內容",
+              "value": "={{ $json.h }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "a617304c-ee87-4fa7-b9e9-aa59a0b1a9db",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "5f18cf1542046b55356f78e2438dd3afefdab30ee273c3a5287c9363500346c4"
+  }
+}
