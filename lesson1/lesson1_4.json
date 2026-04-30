@@ -1,0 +1,172 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        16
+      ],
+      "id": "5d4d0071-687a-4616-a865-122eabb59e87",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        0,
+        16
+      ],
+      "id": "61be23aa-cb53-4de7-b58a-e25e10714ba9",
+      "name": "youbikeAPI"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        16
+      ],
+      "id": "0eaffb42-4118-4c97-802b-57cc976086ef",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "25374d5f-3eca-48b7-8788-f70254ea7a93",
+              "name": "站點",
+              "value": "={{ $json.sna.replace('YouBike2.0_','') }}",
+              "type": "string"
+            },
+            {
+              "id": "7073de75-04b2-4a3e-bac7-e686a9a7b19d",
+              "name": "行政區",
+              "value": "={{ $json.sarea }}",
+              "type": "string"
+            },
+            {
+              "id": "ff846d80-9719-4bf6-8fa2-5d2eb71928a7",
+              "name": "時間",
+              "value": "={{ $json.mday }}",
+              "type": "string"
+            },
+            {
+              "id": "1c570c83-0705-4248-83bd-05672440fa7e",
+              "name": "總車輛數",
+              "value": "={{ $json.Quantity }}",
+              "type": "number"
+            },
+            {
+              "id": "3cb0f2a3-b748-4ba7-989d-2e41eaa558c4",
+              "name": "可借",
+              "value": "={{ $json.available_rent_bikes }}",
+              "type": "number"
+            },
+            {
+              "id": "2bc6469d-031f-4abd-ae4b-44db59128686",
+              "name": "可還",
+              "value": "={{ $json.available_return_bikes }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        16
+      ],
+      "id": "dc75eb43-16c7-486e-8f95-278d2c68d823",
+      "name": "過濾"
+    },
+    {
+      "parameters": {
+        "name": "={{ $now.format('yyyy-MM-dd_HH-mm-ss')}}.xlsx",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        624,
+        16
+      ],
+      "id": "2cdd85ec-f2e6-43e6-a7e0-6d0c01fa5b3f",
+      "name": "Upload file"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "youbikeAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "youbikeAPI": {
+      "main": [
+        [
+          {
+            "node": "過濾",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "過濾": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5f18cf1542046b55356f78e2438dd3afefdab30ee273c3a5287c9363500346c4"
+  }
+}
