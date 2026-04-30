@@ -1,0 +1,135 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        16
+      ],
+      "id": "a0219869-6a8a-4b04-88e1-ffc7fc12bcf6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        48,
+        16
+      ],
+      "id": "86b3714b-e4f2-44af-b90d-2dc35be29e90",
+      "name": "youbikeAPI"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        16
+      ],
+      "id": "1d70802e-c1bf-4306-bebc-593980f93f9a",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "25374d5f-3eca-48b7-8788-f70254ea7a93",
+              "name": "站點",
+              "value": "={{ $json.sna.replace('YouBike2.0_','') }}",
+              "type": "string"
+            },
+            {
+              "id": "7073de75-04b2-4a3e-bac7-e686a9a7b19d",
+              "name": "行政區",
+              "value": "={{ $json.sarea }}",
+              "type": "string"
+            },
+            {
+              "id": "ff846d80-9719-4bf6-8fa2-5d2eb71928a7",
+              "name": "時間",
+              "value": "={{ $json.mday }}",
+              "type": "string"
+            },
+            {
+              "id": "1c570c83-0705-4248-83bd-05672440fa7e",
+              "name": "總車輛數",
+              "value": "={{ $json.Quantity }}",
+              "type": "number"
+            },
+            {
+              "id": "3cb0f2a3-b748-4ba7-989d-2e41eaa558c4",
+              "name": "可借",
+              "value": "={{ $json.available_rent_bikes }}",
+              "type": "number"
+            },
+            {
+              "id": "2bc6469d-031f-4abd-ae4b-44db59128686",
+              "name": "可還",
+              "value": "={{ $json.available_return_bikes }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        16
+      ],
+      "id": "ed3394d3-aa6b-4938-bcde-41ade86a4b6a",
+      "name": "過濾"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "youbikeAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "youbikeAPI": {
+      "main": [
+        [
+          {
+            "node": "過濾",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "過濾": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "5f18cf1542046b55356f78e2438dd3afefdab30ee273c3a5287c9363500346c4"
+  }
+}
