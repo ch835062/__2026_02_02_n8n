@@ -102,9 +102,10 @@
         },
         "folderId": {
           "__rl": true,
+          "value": "18CNRodyYSWFHnCegFDvLQmkFF1VY_wgh",
           "mode": "list",
-          "value": "root",
-          "cachedResultName": "/ (Root folder)"
+          "cachedResultName": "n8n_20260202",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/18CNRodyYSWFHnCegFDvLQmkFF1VY_wgh"
         },
         "options": {}
       },
@@ -115,7 +116,13 @@
         16
       ],
       "id": "2cdd85ec-f2e6-43e6-a7e0-6d0c01fa5b3f",
-      "name": "Upload file"
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "GvC73Eo2u3FalVmN",
+          "name": "Google Drive account"
+        }
+      }
     }
   ],
   "connections": {
